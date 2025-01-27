@@ -212,6 +212,8 @@ Sélectionnez l'interface de bouclage pour la capture
 ## A besoin d'amélioration
 
 1.Générer une image et la déployer sur Docker.
+
 2.Essayez de le porter sur une interface utilisateur graphique (GUI).
+
 3.Prise en charge de plus de protocoles.
 
