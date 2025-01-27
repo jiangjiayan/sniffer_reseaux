@@ -1,6 +1,9 @@
 #ifndef __NETWORK_H
 #define __NETWORK_H
 #define IP_ALEN 4
+#define ETH_ALEN 6 
+
+
 
 
 struct arpaddr {

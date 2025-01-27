@@ -5,6 +5,11 @@
 #include <net/ethernet.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
+#include <netinet/in.h>
+#include <net/if_arp.h>
+#define ARPOP_RREQUEST 3 
+#define ARPOP_RREPLY 4// Define RARP Request if not defined
+#define ARPOP_NAK 255 
 
 #include "network.h"
 #include "transport.h"
@@ -79,11 +84,11 @@ void ip_view(const u_char *packet) {
 		case 0x01:
 			printf("ICMP ");
 			break;
-		case SOL_UDP:
+		case IPPROTO_UDP:
 			printf("UDP ");
 			next_udp = udp_view;
 			break;
-		case SOL_TCP:
+		case IPPROTO_TCP:
 			printf("TCP ");
 			next_tcp = tcp_view;
 			break;
@@ -179,12 +184,7 @@ void arp_view(const u_char *packet) {
 		case ARPOP_RREPLY:
 			printf("RARP Reply\n");
 			break;
-		case ARPOP_InREQUEST:
-			printf("InARP Request\n");
-			break;
-		case ARPOP_InREPLY:
-			printf("InARP Reply\n");
-			break;
+
 		case ARPOP_NAK:
 			printf("ARP NAK\n");
 			break;

@@ -72,14 +72,32 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+
 	// choisit automatiquement l'interface par défaut si non spécifiée
-	if(interface == NULL) {
-		interface = pcap_lookupdev(errbuf);
-		if (interface == NULL) {
-			fprintf(stderr, "Impossible de trouver l'interface par défaut: %s\n", errbuf);
-			return -1;
-		}
+	if (interface == NULL) {
+    	pcap_if_t *alldevs;
+    	pcap_if_t *device;
+
+    // 使用 pcap_findalldevs 获取所有设备
+    	if (pcap_findalldevs(&alldevs, errbuf) == -1) {
+        	fprintf(stderr, "Erreur : impossible de trouver les périphériques: %s\n", errbuf);
+        	return -1;
+    	}
+
+    // 选择第一个设备
+    	device = alldevs;
+    	if (device == NULL) {
+        	fprintf(stderr, "Erreur : aucun périphérique trouvé.\n");
+        	pcap_freealldevs(alldevs);
+        	return -1;
+    	}
+
+    	interface = strdup(device->name); // 复制设备名称
+    	printf("Interface par défaut sélectionnée : %s\n", interface);
+
+    	pcap_freealldevs(alldevs); // 释放设备列表
 	}
+
 
 	// récupère le masque réseau
 	if (pcap_lookupnet(interface, &net, &mask, errbuf) == -1) {
